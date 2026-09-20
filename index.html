@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Libraries: AOS (Scroll Animations), Plotly, Chart.js, Leaflet -->
+  <!-- Libraries: AOS, Plotly, Chart.js, Leaflet -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
@@ -34,7 +34,6 @@
   </script>
 
   <style>
-    /* Glassmorphic card styling */
     .glass-card {
       background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(16px);
@@ -45,25 +44,16 @@
       border-color: rgba(16, 185, 129, 0.35);
       box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.15);
     }
-    /* Animated glowing ambient gradient */
     .hero-glow {
       background: radial-gradient(circle at 50% 20%, rgba(16, 185, 129, 0.18) 0%, transparent 60%);
     }
-    /* Smooth Map Styling for Dark Mode */
     .leaflet-tile {
       filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
-    }
-    .page-view {
-      min-height: calc(100vh - 76px);
-    }
-    .page-view[hidden] {
-      display: none;
     }
   </style>
 </head>
 <body class="bg-dark-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white">
 
-  <!-- Glow Background Effect -->
   <div class="fixed inset-0 hero-glow pointer-events-none z-0"></div>
 
   <!-- Navigation Bar -->
@@ -79,9 +69,6 @@
         </div>
       </div>
       <div class="flex items-center gap-4">
-        <a href="#analytics" data-page-link="analytics" class="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold text-slate-300 border border-slate-700 hover:border-emerald-500 hover:text-emerald-400 transition-colors">
-          Analytics <span aria-hidden="true">↗</span>
-        </a>
         <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           Pareto Solver Active
@@ -90,9 +77,8 @@
     </div>
   </header>
 
-  <main id="homePage" class="page-view">
-    <!-- Hero Section -->
-    <section class="relative z-10 pt-16 pb-12 px-6 max-w-7xl mx-auto text-center" data-aos="fade-down" data-aos-duration="1000">
+  <!-- Hero & Controls Section -->
+  <section class="relative z-10 pt-16 pb-12 px-6 max-w-7xl mx-auto text-center" data-aos="fade-down" data-aos-duration="1000">
     <div class="inline-block mb-3 px-4 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-xs font-medium text-emerald-400">
       Multi-Modal Scope-3 Supply Chain Intelligence
     </div>
@@ -103,26 +89,32 @@
       Calculate multi-objective trade-offs between Cost, Transit Speed, and GHG Emissions to identify optimal Pareto-efficient transit options.
     </p>
 
-    <!-- Floating Interactive Control Dock -->
+    <!-- Control Dock -->
     <div class="mt-10 glass-card p-5 rounded-2xl max-w-5xl mx-auto shadow-2xl transition-all duration-300" data-aos="zoom-in" data-aos-delay="200">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left">
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Origin Port/Hub</label>
           <select id="originCity" class="w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
-            <option value="Mumbai" selected>Mumbai (JNPT Hub)</option>
-            <option value="Chennai">Chennai (Port Area)</option>
-            <option value="Kolkata">Kolkata (Syama Port)</option>
-            <option value="Bengaluru">Bengaluru (ICD Whitefield)</option>
+            <option value="Mumbai" selected>Mumbai</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Pune">Pune</option>
+            <option value="Ahmedabad">Ahmedabad</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Bengaluru">Bengaluru</option>
+            <option value="Hyderabad">Hyderabad</option>
           </select>
         </div>
 
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Destination Corridor</label>
           <select id="destCity" class="w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
-            <option value="Delhi" selected>Delhi-NCR (Tughlakabad Hub)</option>
-            <option value="Ahmedabad">Ahmedabad Hub</option>
-            <option value="Hyderabad">Hyderabad Cargo Terminus</option>
-            <option value="Nagpur">Nagpur Multi-Modal Hub</option>
+            <option value="Delhi" selected>Delhi</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Pune">Pune</option>
+            <option value="Ahmedabad">Ahmedabad</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Bengaluru">Bengaluru</option>
+            <option value="Hyderabad">Hyderabad</option>
           </select>
         </div>
 
@@ -137,7 +129,7 @@
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Optimization Priority</label>
           <select id="priorityBias" class="w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none">
-            <option value="balanced">Balanced (Pareto Minimum)</option>
+            <option value="balanced" selected>Balanced (Pareto Minimum)</option>
             <option value="green">Maximum Carbon Offset (Rail)</option>
             <option value="urgent">Transit Speed Priority (Air)</option>
             <option value="cost">Minimum Expenditure (Road/Rail)</option>
@@ -152,19 +144,17 @@
         </button>
       </div>
     </div>
-    </section>
+  </section>
 
   <!-- Live Dynamic Banner -->
-    <section class="max-w-7xl mx-auto px-6 mb-8 z-10 relative" data-aos="fade-up">
+  <section class="max-w-7xl mx-auto px-6 mb-8 z-10 relative" data-aos="fade-up">
     <div id="recommendationCard" class="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/70 via-slate-900/90 to-dark-900 border border-emerald-500/30 flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-4">
-        <div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-2xl">
-          🚆
-        </div>
+        <div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 text-2xl">🚆</div>
         <div>
           <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Algorithmic Recommendation</span>
           <h3 id="recommendationTitle" class="text-lg font-bold text-white">Route via Dedicated Freight Corridor (DFCCIL)</h3>
-          <p id="recommendationSub" class="text-sm text-slate-400">Rail cuts emissions by ~69% compared to conventional trucking while reducing overall expenditure.</p>
+          <p id="recommendationSub" class="text-sm text-slate-400">Rail delivers optimal trade-offs relative to highway trucking.</p>
         </div>
       </div>
       <div class="flex items-center gap-3">
@@ -174,106 +164,82 @@
         </div>
       </div>
     </div>
-    </section>
+  </section>
 
   <!-- Dynamic KPI Mode Grid -->
-    <section class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 relative z-10">
-    
+  <section class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 relative z-10">
     <!-- Road Card -->
-    <div class="glass-card p-6 rounded-2xl border-t-4 border-t-amber-500 transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+    <div class="glass-card p-6 rounded-2xl border-t-4 border-t-amber-500" data-aos="fade-up" data-aos-delay="100">
       <div class="flex justify-between items-start mb-4">
         <div>
           <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Highway Road Trucking</span>
-          <h4 class="text-lg font-bold text-white mt-1">Class-4 Multi-Axle</h4>
+          <h4 class="text-lg font-bold text-white mt-1">Multi-Axle Truck</h4>
         </div>
         <span class="text-2xl">🚛</span>
       </div>
       <div class="space-y-3">
         <div>
           <div class="text-xs text-slate-400">Emissions</div>
-          <div class="text-2xl font-extrabold text-white" id="roadEmissions">3.68 <span class="text-sm font-normal text-slate-400">t CO₂</span></div>
+          <div class="text-2xl font-extrabold text-white" id="roadEmissions">-- <span class="text-sm font-normal text-slate-400">t CO₂</span></div>
         </div>
         <div class="grid grid-cols-2 pt-2 border-t border-slate-800 text-xs text-slate-300">
-          <div>Cost: <strong id="roadCost" class="text-white">₹87,500</strong></div>
-          <div>Transit: <strong id="roadTime" class="text-white">38 hrs</strong></div>
+          <div>Cost: <strong id="roadCost" class="text-white">--</strong></div>
+          <div>Transit: <strong id="roadTime" class="text-white">--</strong></div>
         </div>
       </div>
     </div>
 
     <!-- Rail Card -->
-    <div class="glass-card p-6 rounded-2xl border-t-4 border-t-emerald-500 ring-2 ring-emerald-500/20 transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+    <div class="glass-card p-6 rounded-2xl border-t-4 border-t-emerald-500 ring-2 ring-emerald-500/20" data-aos="fade-up" data-aos-delay="200">
       <div class="flex justify-between items-start mb-4">
         <div>
           <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Electric Rail Freight</span>
-          <h4 class="text-lg font-bold text-white mt-1">Dedicated Freight Corridor</h4>
+          <h4 class="text-lg font-bold text-white mt-1">Indian Railways / DFCCIL</h4>
         </div>
         <span class="text-2xl">🚆</span>
       </div>
       <div class="space-y-3">
         <div>
           <div class="text-xs text-slate-400">Emissions</div>
-          <div class="text-2xl font-extrabold text-emerald-400" id="railEmissions">1.05 <span class="text-sm font-normal text-slate-400">t CO₂</span></div>
+          <div class="text-2xl font-extrabold text-emerald-400" id="railEmissions">-- <span class="text-sm font-normal text-slate-400">t CO₂</span></div>
         </div>
         <div class="grid grid-cols-2 pt-2 border-t border-slate-800 text-xs text-slate-300">
-          <div>Cost: <strong id="railCost" class="text-white">₹49,000</strong></div>
-          <div>Transit: <strong id="railTime" class="text-white">46 hrs</strong></div>
+          <div>Cost: <strong id="railCost" class="text-white">--</strong></div>
+          <div>Transit: <strong id="railTime" class="text-white">--</strong></div>
         </div>
       </div>
     </div>
 
     <!-- Air Card -->
-    <div class="glass-card p-6 rounded-2xl border-t-4 border-t-rose-500 transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
+    <div class="glass-card p-6 rounded-2xl border-t-4 border-t-rose-500" data-aos="fade-up" data-aos-delay="300">
       <div class="flex justify-between items-start mb-4">
         <div>
           <span class="text-xs font-bold text-rose-400 uppercase tracking-widest">Air Express Cargo</span>
-          <h4 class="text-lg font-bold text-white mt-1">Domestic Freighter</h4>
+          <h4 class="text-lg font-bold text-white mt-1">Dedicated Freighter</h4>
         </div>
         <span class="text-2xl">✈️</span>
       </div>
       <div class="space-y-3">
         <div>
           <div class="text-xs text-slate-400">Emissions</div>
-          <div class="text-2xl font-extrabold text-rose-400" id="airEmissions">15.5 <span class="text-sm font-normal text-slate-400">t CO₂</span></div>
+          <div class="text-2xl font-extrabold text-rose-400" id="airEmissions">-- <span class="text-sm font-normal text-slate-400">t CO₂</span></div>
         </div>
         <div class="grid grid-cols-2 pt-2 border-t border-slate-800 text-xs text-slate-300">
-          <div>Cost: <strong id="airCost" class="text-white">₹245,000</strong></div>
-          <div>Transit: <strong id="airTime" class="text-white">7 hrs</strong></div>
+          <div>Cost: <strong id="airCost" class="text-white">--</strong></div>
+          <div>Transit: <strong id="airTime" class="text-white">--</strong></div>
         </div>
       </div>
     </div>
+  </section>
 
-    </section>
-
-    <div class="max-w-7xl mx-auto px-6 pb-16 text-center">
-      <a href="#analytics" data-page-link="analytics" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-500 text-dark-950 text-sm font-extrabold shadow-lg shadow-emerald-500/20 hover:bg-emerald-400 transition-colors">
-        Open visual analytics <span aria-hidden="true">→</span>
-      </a>
-    </div>
-  </main>
-
-  <!-- Interactive Visual Analytics Section -->
-  <main id="analyticsPage" class="page-view" hidden>
-    <div class="max-w-7xl mx-auto px-6 pt-10 pb-4 flex items-end justify-between gap-4">
-      <div>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Decision workspace</p>
-        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white mt-2">Visual route intelligence</h2>
-        <p class="text-slate-400 mt-2 max-w-2xl">Inspect geography, operating benchmarks, trade-offs, and carbon allocation in one focused view.</p>
-      </div>
-      <a href="#home" data-page-link="home" class="shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold text-slate-300 border border-slate-700 hover:border-emerald-500 hover:text-emerald-400 transition-colors">
-        <span aria-hidden="true">←</span> Home
-      </a>
-    </div>
-  <section class="max-w-7xl mx-auto px-6 space-y-8 pb-16 relative z-10">
-
-    <!-- Row 1: India Geolocation Route Map + Bar Breakdown -->
+  <!-- Interactive Visual Analytics -->
+  <section class="max-w-7xl mx-auto px-6 space-y-8 mb-16 relative z-10">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
-      <!-- Leaflet Interactive Map -->
       <div class="lg:col-span-7 glass-card p-5 rounded-2xl flex flex-col" data-aos="fade-right">
         <div class="flex justify-between items-center mb-4">
           <div>
             <h3 class="font-bold text-white text-base">Spatial Route Projection</h3>
-            <p class="text-xs text-slate-400">Real-time corridor routing across primary National Highways & Railways</p>
+            <p class="text-xs text-slate-400">Routing between key Indian logistics centers</p>
           </div>
           <div class="flex items-center gap-3 text-xs">
             <span class="flex items-center gap-1.5"><span class="w-3 h-1 bg-amber-400 rounded"></span> Road</span>
@@ -283,167 +249,129 @@
         <div id="routeMap" class="w-full h-80 rounded-xl overflow-hidden z-10"></div>
       </div>
 
-      <!-- Comparison Metrics Chart -->
       <div class="lg:col-span-5 glass-card p-5 rounded-2xl flex flex-col" data-aos="fade-left">
         <h3 class="font-bold text-white text-base mb-1">Normalized Mode Benchmark</h3>
-        <p class="text-xs text-slate-400 mb-4">Relative cost, transit time, and emissions indexed per ton-km</p>
+        <p class="text-xs text-slate-400 mb-4">Emissions vs. Transit Time</p>
         <div class="flex-1 min-h-[280px]">
           <canvas id="barBenchmarkChart"></canvas>
         </div>
       </div>
-
     </div>
 
-    <!-- Row 2: 3D Trade-Off Scatter & Sankey Diagram -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      
-      <!-- Plotly 3D Pareto Frontier -->
       <div class="glass-card p-5 rounded-2xl flex flex-col" data-aos="fade-up" data-aos-delay="100">
-        <div class="flex justify-between items-center mb-2">
-          <div>
-            <h3 class="font-bold text-white text-base">Cost, Speed & Carbon Trade-off</h3>
-            <p class="text-xs text-slate-400">Rotate the surface to compare every freight mode across three decisions</p>
-          </div>
-        </div>
+        <h3 class="font-bold text-white text-base mb-1">Cost-Speed-Emission Pareto Frontier</h3>
+        <p class="text-xs text-slate-400 mb-2">Interactive 3D optimization manifold across evaluated modes</p>
         <div id="pareto3d" class="w-full h-80"></div>
       </div>
 
-      <!-- Plotly Sankey Flow -->
       <div class="glass-card p-5 rounded-2xl flex flex-col" data-aos="fade-up" data-aos-delay="200">
-        <div class="flex justify-between items-center mb-2">
-          <div>
-            <h3 class="font-bold text-white text-base">Carbon Flow Distribution (Sankey)</h3>
-            <p class="text-xs text-slate-400">Supply-chain carbon allocation by segment and transit node</p>
-          </div>
-        </div>
+        <h3 class="font-bold text-white text-base mb-1">Carbon Flow Distribution (Sankey)</h3>
+        <p class="text-xs text-slate-400 mb-2">Supply-chain carbon allocation by segment and transit node</p>
         <div id="sankeyChart" class="w-full h-80"></div>
       </div>
-
     </div>
-
   </section>
-  </main>
 
-  <!-- Interactive Data Engine Script -->
+  <!-- JAVASCRIPT PIPELINE CONNECTOR -->
   <script>
-    // Initialize AOS animations
     AOS.init({ once: true, duration: 800 });
 
-    // City GPS Nodes
     const CITY_COORDINATES = {
       Mumbai: [18.9438, 72.8354],
       Delhi: [28.6139, 77.2090],
       Chennai: [13.0827, 80.2707],
-      Kolkata: [22.5726, 88.3639],
       Bengaluru: [12.9716, 77.5946],
       Ahmedabad: [23.0225, 72.5714],
       Hyderabad: [17.3850, 78.4867],
-      Nagpur: [21.1458, 79.0882]
+      Pune: [18.5204, 73.8567]
     };
-
-    // Baseline India Logistics Emission Factors (kg CO2 / tonne-km)
-    const EMISSIONS_INDEX = { road: 0.105, rail: 0.030, air: 0.620 };
-    // Freight Rates per tonne-km (INR)
-    const FREIGHT_RATES = { road: 2.50, rail: 1.40, air: 9.80 };
-    // Average speeds (km/h)
-    const TRANSIT_SPEEDS = { road: 42, rail: 32, air: 480 };
 
     let map, roadPolyline, railPolyline, barChartInstance;
 
-    function showPage(pageName) {
-      const showAnalytics = pageName === 'analytics';
-      document.getElementById('homePage').hidden = showAnalytics;
-      document.getElementById('analyticsPage').hidden = !showAnalytics;
-      if (showAnalytics && map) {
-        setTimeout(() => {
-          map.invalidateSize();
-          Plotly.relayout('pareto3d', { autosize: true });
-          Plotly.relayout('sankeyChart', { autosize: true });
-        }, 0);
-      }
-    }
-
-    // Initialize Map with Leaflet
     function initMap() {
-      map = L.map('routeMap', { zoomControl: false }).setView([22.5, 78.5], 5);
+      map = L.map('routeMap', { zoomControl: false }).setView([20.5937, 78.9629], 5);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(map);
       L.control.zoom({ position: 'bottomright' }).addTo(map);
     }
 
-    // Haversine Distance helper
-    function getDistance(c1, c2) {
-      const R = 6371;
-      const dLat = (c2[0] - c1[0]) * Math.PI / 180;
-      const dLon = (c2[1] - c1[1]) * Math.PI / 180;
-      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(c1[0] * Math.PI / 180) * Math.cos(c2[0] * Math.PI / 180) *
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-      return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
-    }
-
-    function recalculateAndAnimate() {
+    async function recalculateAndAnimate() {
       const origin = document.getElementById('originCity').value;
       const dest = document.getElementById('destCity').value;
       const weight = parseFloat(document.getElementById('cargoWeight').value) || 20;
+      const priority = document.getElementById('priorityBias').value;
 
-      const originCoord = CITY_COORDINATES[origin];
-      const destCoord = CITY_COORDINATES[dest];
+      let costW = 0.33, timeW = 0.33, emissW = 0.34;
+      if (priority === 'green') { emissW = 0.70; costW = 0.15; timeW = 0.15; }
+      else if (priority === 'urgent') { timeW = 0.70; costW = 0.15; emissW = 0.15; }
+      else if (priority === 'cost') { costW = 0.70; timeW = 0.15; emissW = 0.15; }
 
-      const directDist = getDistance(originCoord, destCoord);
-      const roadDist = Math.round(directDist * 1.22);
-      const railDist = Math.round(directDist * 1.15);
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/optimize', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            origin: origin,
+            destination: dest,
+            payload_tonnes: weight,
+            commodity_type: 'General Goods',
+            cost_weight: costW,
+            time_weight: timeW,
+            emission_weight: emissW
+          })
+        });
 
-      // Calculations
-      const results = {
-        road: {
-          emissions: ((roadDist * weight * EMISSIONS_INDEX.road) / 1000).toFixed(2),
-          cost: Math.round(roadDist * weight * FREIGHT_RATES.road),
-          time: Math.round(roadDist / TRANSIT_SPEEDS.road + 5)
-        },
-        rail: {
-          emissions: ((railDist * weight * EMISSIONS_INDEX.rail) / 1000).toFixed(2),
-          cost: Math.round(railDist * weight * FREIGHT_RATES.rail),
-          time: Math.round(railDist / TRANSIT_SPEEDS.rail + 8)
-        },
-        air: {
-          emissions: ((directDist * weight * EMISSIONS_INDEX.air) / 1000).toFixed(2),
-          cost: Math.round(directDist * weight * FREIGHT_RATES.air),
-          time: Math.round(directDist / TRANSIT_SPEEDS.air + 4)
+        if (!response.ok) throw new Error(`Server returned status: ${response.status}`);
+
+        const data = await response.json();
+        const modes = data.mode_breakdown;
+        const road = modes.find(m => m.mode === 'road');
+        const rail = modes.find(m => m.mode === 'rail');
+        const air = modes.find(m => m.mode === 'air');
+
+        // 1. KPI Cards
+        document.getElementById('roadEmissions').innerHTML = `${road.emissions_co2_tonnes} <span class="text-sm font-normal text-slate-400">t CO₂</span>`;
+        document.getElementById('roadCost').innerText = `₹${road.direct_cost_inr.toLocaleString()}`;
+        document.getElementById('roadTime').innerText = `${road.duration_hours} hrs`;
+
+        document.getElementById('railEmissions').innerHTML = `${rail.emissions_co2_tonnes} <span class="text-sm font-normal text-slate-400">t CO₂</span>`;
+        document.getElementById('railCost').innerText = `₹${rail.direct_cost_inr.toLocaleString()}`;
+        document.getElementById('railTime').innerText = `${rail.duration_hours} hrs`;
+
+        document.getElementById('airEmissions').innerHTML = `${air.emissions_co2_tonnes} <span class="text-sm font-normal text-slate-400">t CO₂</span>`;
+        document.getElementById('airCost').innerText = `₹${air.direct_cost_inr.toLocaleString()}`;
+        document.getElementById('airTime').innerText = `${air.duration_hours} hrs`;
+
+        // 2. Banner
+        const rec = data.recommendation;
+        document.getElementById('carbonCutText').innerText = `-${rec.carbon_reduction_pct_vs_road}% CO₂e`;
+        document.getElementById('recommendationTitle').innerText = `Optimal Mode: ${rec.recommended_mode.toUpperCase()}`;
+        document.getElementById('recommendationSub').innerText = 
+          `Switching achieves a ${rec.carbon_reduction_pct_vs_road}% emissions reduction with ₹${Math.abs(rec.cost_savings_inr_vs_road).toLocaleString()} ${rec.cost_savings_inr_vs_road >= 0 ? 'savings' : 'premium'} relative to highway trucking.`;
+
+        // 3. Leaflet Map
+        const originCoord = CITY_COORDINATES[origin];
+        const destCoord = CITY_COORDINATES[dest];
+        if (originCoord && destCoord) {
+          updateMapRoutes(originCoord, destCoord);
         }
-      };
 
-      // Update KPI Elements
-      document.getElementById('roadEmissions').innerHTML = `${results.road.emissions} <span class="text-sm font-normal text-slate-400">t CO₂</span>`;
-      document.getElementById('roadCost').innerText = `₹${results.road.cost.toLocaleString()}`;
-      document.getElementById('roadTime').innerText = `${results.road.time} hrs`;
+        // 4. Charts
+        renderBarBenchmark({ road, rail, air });
+        renderPareto3D({ road, rail, air });
+        renderSankeyChart(origin, dest, { road, rail, air });
 
-      document.getElementById('railEmissions').innerHTML = `${results.rail.emissions} <span class="text-sm font-normal text-slate-400">t CO₂</span>`;
-      document.getElementById('railCost').innerText = `₹${results.rail.cost.toLocaleString()}`;
-      document.getElementById('railTime').innerText = `${results.rail.time} hrs`;
-
-      document.getElementById('airEmissions').innerHTML = `${results.air.emissions} <span class="text-sm font-normal text-slate-400">t CO₂</span>`;
-      document.getElementById('airCost').innerText = `₹${results.air.cost.toLocaleString()}`;
-      document.getElementById('airTime').innerText = `${results.air.time} hrs`;
-
-      const savingsPct = (((results.road.emissions - results.rail.emissions) / results.road.emissions) * 100).toFixed(1);
-      document.getElementById('carbonCutText').innerText = `-${savingsPct}% CO₂e`;
-
-      // Draw map routes
-      updateMapRoutes(originCoord, destCoord);
-      
-      // Update Visuals
-      renderBarBenchmark(results);
-      renderPareto3D(results);
-      renderSankeyChart(origin, dest, results);
+      } catch (err) {
+        console.error("Pipeline request failed:", err);
+      }
     }
 
     function updateMapRoutes(coordA, coordB) {
       if (roadPolyline) map.removeLayer(roadPolyline);
       if (railPolyline) map.removeLayer(railPolyline);
 
-      // Slightly offset path points to visualize parallel lines
       const midPointRoad = [(coordA[0] + coordB[0]) / 2 + 0.5, (coordA[1] + coordB[1]) / 2 - 0.5];
       const midPointRail = [(coordA[0] + coordB[0]) / 2 - 0.4, (coordA[1] + coordB[1]) / 2 + 0.4];
 
@@ -464,13 +392,13 @@
           datasets: [
             {
               label: 'Carbon (Tonnes)',
-              data: [results.road.emissions, results.rail.emissions, results.air.emissions],
+              data: [results.road.emissions_co2_tonnes, results.rail.emissions_co2_tonnes, results.air.emissions_co2_tonnes],
               backgroundColor: '#10b981',
               borderRadius: 6
             },
             {
               label: 'Transit Time (Hrs)',
-              data: [results.road.time, results.rail.time, results.air.time],
+              data: [results.road.duration_hours, results.rail.duration_hours, results.air.duration_hours],
               backgroundColor: '#0284c7',
               borderRadius: 6
             }
@@ -492,9 +420,9 @@
 
     function renderPareto3D(results) {
       const trace = {
-        x: [results.road.time, results.rail.time, results.air.time],
-        y: [results.road.cost, results.rail.cost, results.air.cost],
-        z: [results.road.emissions, results.rail.emissions, results.air.emissions],
+        x: [results.road.duration_hours, results.rail.duration_hours, results.air.duration_hours],
+        y: [results.road.direct_cost_inr, results.rail.direct_cost_inr, results.air.direct_cost_inr],
+        z: [results.road.emissions_co2_tonnes, results.rail.emissions_co2_tonnes, results.air.emissions_co2_tonnes],
         mode: 'markers+text',
         text: ['Road (Highway)', 'Rail (DFCCIL - Optimal)', 'Air Cargo'],
         textposition: 'top center',
@@ -502,10 +430,8 @@
         marker: {
           size: [12, 14, 16],
           color: ['#f59e0b', '#10b981', '#f43f5e'],
-          opacity: 0.95,
-          line: { color: '#ffffff', width: 1 }
+          opacity: 0.9
         },
-        hovertemplate: '<b>%{text}</b><br>Transit: %{x} hrs<br>Cost: ₹%{y:,.0f}<br>Carbon: %{z:.2f} t CO₂<extra></extra>',
         type: 'scatter3d'
       };
 
@@ -513,15 +439,11 @@
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
         margin: { l: 0, r: 0, b: 0, t: 0 },
-        font: { family: 'Plus Jakarta Sans', color: '#94a3b8', size: 11 },
         scene: {
-          bgcolor: 'rgba(0,0,0,0)',
-          camera: { eye: { x: 1.55, y: 1.55, z: 1.25 } },
-          xaxis: { title: { text: 'Transit time (hours)', font: { color: '#cbd5e1', size: 12 } }, color: '#94a3b8', gridcolor: '#334155', zerolinecolor: '#475569' },
-          yaxis: { title: { text: 'Freight cost (INR)', font: { color: '#cbd5e1', size: 12 } }, color: '#94a3b8', gridcolor: '#334155', zerolinecolor: '#475569' },
-          zaxis: { title: { text: 'Carbon emissions (tonnes)', font: { color: '#cbd5e1', size: 12 } }, color: '#94a3b8', gridcolor: '#334155', zerolinecolor: '#475569' }
-        },
-        hoverlabel: { bgcolor: '#0f172a', bordercolor: '#10b981', font: { family: 'Plus Jakarta Sans', color: '#f8fafc' } }
+          xaxis: { title: 'Hours', color: '#94a3b8', gridcolor: '#334155' },
+          yaxis: { title: 'Cost (₹)', color: '#94a3b8', gridcolor: '#334155' },
+          zaxis: { title: 'CO₂ (t)', color: '#94a3b8', gridcolor: '#334155' }
+        }
       };
 
       Plotly.newPlot('pareto3d', [trace], layout, { responsive: true, displayModeBar: false });
@@ -548,12 +470,12 @@
           source: [0, 0, 0, 1, 2, 3],
           target: [1, 2, 3, 4, 4, 4],
           value: [
-            results.road.emissions,
-            results.rail.emissions,
-            results.air.emissions,
-            results.road.emissions,
-            results.rail.emissions,
-            results.air.emissions
+            results.road.emissions_co2_tonnes,
+            results.rail.emissions_co2_tonnes,
+            results.air.emissions_co2_tonnes,
+            results.road.emissions_co2_tonnes,
+            results.rail.emissions_co2_tonnes,
+            results.air.emissions_co2_tonnes
           ],
           color: [
             "rgba(245, 158, 11, 0.2)",
@@ -576,15 +498,7 @@
       Plotly.newPlot('sankeyChart', data, layout, { responsive: true, displayModeBar: false });
     }
 
-    // Lifecycle Run
     window.addEventListener('DOMContentLoaded', () => {
-      showPage(window.location.hash === '#analytics' ? 'analytics' : 'home');
-      document.querySelectorAll('[data-page-link]').forEach((link) => {
-        link.addEventListener('click', () => showPage(link.dataset.pageLink));
-      });
-      window.addEventListener('hashchange', () => {
-        showPage(window.location.hash === '#analytics' ? 'analytics' : 'home');
-      });
       initMap();
       recalculateAndAnimate();
     });
