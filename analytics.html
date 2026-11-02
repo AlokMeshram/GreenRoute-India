@@ -1,0 +1,102 @@
+﻿<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GreenRoute India - Carbon & Freight Optimizer</title>
+
+  <!-- Google Fonts & Tailwind CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Libraries: AOS, Plotly, Chart.js, Leaflet -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+          colors: {
+            brand: { 50: '#ecfdf5', 500: '#10b981', 600: '#059669', 900: '#064e3b' },
+            dark: { 950: '#090d16', 900: '#0f172a', 800: '#1e293b', 700: '#334155' }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card:hover {
+      border-color: rgba(16, 185, 129, 0.35);
+      box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.15);
+    }
+    .hero-glow {
+      background: radial-gradient(circle at 50% 20%, rgba(16, 185, 129, 0.18) 0%, transparent 60%);
+    }
+    .leaflet-tile {
+      filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+    }
+    .route-city-label {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 6px;
+      color: #f8fafc;
+      font: 700 11px "Plus Jakarta Sans", sans-serif;
+      padding: 3px 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    }
+    .route-city-label::before {
+      border-top-color: rgba(15, 23, 42, 0.95);
+    }
+  </style>
+</head><body class="bg-dark-950 text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white">
+  <div class="fixed inset-0 hero-glow pointer-events-none z-0"></div>
+  <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center shadow-lg shadow-brand-500/20"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+        <div><span class="text-lg font-extrabold tracking-tight text-white">GreenRoute <span class="text-brand-500">India</span></span><span class="block text-[10px] uppercase font-bold tracking-widest text-slate-400">Carbon & Freight Optimization Engine</span></div>
+      </a>
+      <a href="index.html" class="px-4 py-2 rounded-xl border border-slate-700 text-sm font-semibold text-slate-300 hover:border-emerald-500/50 hover:text-emerald-300">Back to Optimizer</a>
+    </div>
+  </header>
+  <main class="relative z-10 max-w-7xl mx-auto px-6 py-10">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+      <div><div class="text-xs font-bold uppercase tracking-widest text-emerald-400">Route analytics</div><h1 class="text-3xl md:text-4xl font-extrabold text-white mt-2">Maps, charts and mode comparison</h1><p class="text-slate-400 mt-2">These values use the same route, payload and optimization settings selected on the optimizer page.</p></div>
+      <button onclick="recalculateAndAnimate()" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-dark-950 font-bold rounded-xl text-sm shadow-lg shadow-emerald-500/25">Refresh Analysis</button>
+    </div>
+    <section class="glass-card p-5 rounded-2xl mb-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Origin<select id="originCity" class="block mt-2 w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-100"><option>Mumbai</option><option>Delhi</option><option>Pune</option><option>Ahmedabad</option><option>Chennai</option><option>Bengaluru</option><option>Hyderabad</option></select></label>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Destination<select id="destCity" class="block mt-2 w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-100"><option>Delhi</option><option>Mumbai</option><option>Pune</option><option>Ahmedabad</option><option>Chennai</option><option>Bengaluru</option><option>Hyderabad</option></select></label>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Payload (tonnes)<input id="cargoWeight" type="number" min="1" max="1000" value="25" class="block mt-2 w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-100"></label>
+        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Priority<select id="priorityBias" class="block mt-2 w-full bg-dark-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-100"><option value="balanced">Balanced (Pareto Minimum)</option><option value="green">Maximum Carbon Offset (Rail)</option><option value="urgent">Transit Speed Priority (Air)</option><option value="cost">Minimum Expenditure (Road/Rail)</option></select></label>
+      </div>
+    </section>
+    <section class="mb-8"><div class="glass-card p-5 rounded-2xl flex items-center justify-between gap-4"><div><div class="text-xs font-bold uppercase tracking-wider text-emerald-400">Recommendation</div><h2 id="recommendationTitle" class="text-xl font-bold text-white mt-1">Loading route analysis...</h2><p id="recommendationSub" class="text-sm text-slate-400 mt-1"></p></div><div class="text-right"><div class="text-xs text-slate-400">Estimated Carbon Cut</div><div id="carbonCutText" class="text-xl font-black text-emerald-400">--</div></div></div></section>
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="glass-card p-5 rounded-2xl border-t-4 border-amber-500"><div class="text-xs font-bold text-amber-400 uppercase tracking-widest">Road Freight</div><div id="roadEmissions" class="text-2xl font-extrabold mt-4">-- <span class="text-sm font-normal text-slate-400">t CO₂</span></div><div class="mt-3 pt-3 border-t border-slate-800 text-sm">Cost: <strong id="roadCost">--</strong><span class="float-right">Transit: <strong id="roadTime">--</strong></span></div></div>
+      <div class="glass-card p-5 rounded-2xl border-t-4 border-emerald-500"><div class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Rail Freight</div><div id="railEmissions" class="text-2xl font-extrabold mt-4">-- <span class="text-sm font-normal text-slate-400">t CO₂</span></div><div class="mt-3 pt-3 border-t border-slate-800 text-sm">Cost: <strong id="railCost">--</strong><span class="float-right">Transit: <strong id="railTime">--</strong></span></div></div>
+      <div class="glass-card p-5 rounded-2xl border-t-4 border-rose-500"><div class="text-xs font-bold text-rose-400 uppercase tracking-widest">Air Cargo</div><div id="airEmissions" class="text-2xl font-extrabold mt-4">-- <span class="text-sm font-normal text-slate-400">t CO₂</span></div><div class="mt-3 pt-3 border-t border-slate-800 text-sm">Cost: <strong id="airCost">--</strong><span class="float-right">Transit: <strong id="airTime">--</strong></span></div></div>
+    </section>
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+      <div class="lg:col-span-7 glass-card p-5 rounded-2xl"><div class="flex justify-between items-center mb-4"><div><h3 class="font-bold text-white text-base">Spatial Route Projection</h3><p class="text-xs text-slate-400">Selected origin and destination with road and rail corridors</p></div><div class="flex items-center gap-3 text-xs"><span class="flex items-center gap-1.5"><span class="w-3 h-1 bg-amber-400 rounded"></span> Road</span><span class="flex items-center gap-1.5"><span class="w-3 h-1 bg-emerald-400 rounded"></span> Rail</span></div></div><div id="routeMap" class="w-full h-96 rounded-xl overflow-hidden"></div></div>
+      <div class="lg:col-span-5 glass-card p-5 rounded-2xl"><h3 class="font-bold text-white text-base mb-1">Normalized Mode Benchmark</h3><p class="text-xs text-slate-400 mb-4">Emissions vs. transit time</p><div class="h-96"><canvas id="barBenchmarkChart"></canvas></div></div>
+    </section>
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="glass-card p-5 rounded-2xl"><h3 class="font-bold text-white text-base mb-1">Cost-Speed-Emission Pareto Frontier</h3><p class="text-xs text-slate-400 mb-2">Interactive 3D optimization manifold</p><div id="pareto3d" class="w-full h-96"></div></div><div class="glass-card p-5 rounded-2xl"><h3 class="font-bold text-white text-base mb-1">Carbon Flow Distribution (Sankey)</h3><p class="text-xs text-slate-400 mb-2">Supply-chain carbon allocation by transit node</p><div id="sankeyChart" class="w-full h-96"></div></div></section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
