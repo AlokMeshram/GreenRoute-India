@@ -15,6 +15,13 @@
       }));
     }
 
+    const PRIORITY_LABELS = {
+      balanced: 'Balanced trade-off',
+      green: 'Lowest emissions',
+      urgent: 'Fastest transit',
+      cost: 'Lowest cost'
+    };
+
     AOS.init({ once: true, duration: 800 });
 
     const CITY_COORDINATES = {
@@ -51,7 +58,33 @@
       return { road, rail, air };
     }
 
-    function renderResults(origin, dest, results, recommendation) {
+    function getFallbackRecommendation(results, priority) {
+      const weights = {
+        balanced: { cost: 0.33, time: 0.33, emissions: 0.34 },
+        green: { cost: 0.15, time: 0.15, emissions: 0.70 },
+        urgent: { cost: 0.15, time: 0.70, emissions: 0.15 },
+        cost: { cost: 0.70, time: 0.15, emissions: 0.15 }
+      }[priority] || { cost: 0.33, time: 0.33, emissions: 0.34 };
+      const modes = Object.values(results);
+      const maxCost = Math.max(...modes.map(mode => mode.direct_cost_inr));
+      const maxTime = Math.max(...modes.map(mode => mode.duration_hours));
+      const maxEmissions = Math.max(...modes.map(mode => mode.emissions_co2_tonnes));
+      const recommended = modes.reduce((best, mode) => {
+        const score =
+          weights.cost * (mode.direct_cost_inr / maxCost) +
+          weights.time * (mode.duration_hours / maxTime) +
+          weights.emissions * (mode.emissions_co2_tonnes / maxEmissions);
+        return !best || score < best.score ? { mode, score } : best;
+      }, null).mode;
+
+      return {
+        recommended_mode: recommended.mode,
+        carbon_reduction_pct_vs_road: Number(((1 - recommended.emissions_co2_tonnes / results.road.emissions_co2_tonnes) * 100).toFixed(1)),
+        cost_savings_inr_vs_road: Math.round(results.road.direct_cost_inr - recommended.direct_cost_inr)
+      };
+    }
+
+    function renderResults(origin, dest, results, recommendation, priority) {
       ['road', 'rail', 'air'].forEach(mode => {
         const result = results[mode];
         document.getElementById(`${mode}Emissions`).innerHTML = `${result.emissions_co2_tonnes} <span class="text-sm font-normal text-slate-400">t CO2</span>`;
@@ -59,14 +92,13 @@
         document.getElementById(`${mode}Time`).innerText = `${result.duration_hours} hrs`;
       });
 
-      const rec = recommendation || {
-        recommended_mode: 'rail',
-        carbon_reduction_pct_vs_road: Number(((1 - results.rail.emissions_co2_tonnes / results.road.emissions_co2_tonnes) * 100).toFixed(1)),
-        cost_savings_inr_vs_road: Math.round(results.road.direct_cost_inr - results.rail.direct_cost_inr)
-      };
+      const rec = recommendation || getFallbackRecommendation(results, priority);
+      const priorityLabel = PRIORITY_LABELS[priority] || PRIORITY_LABELS.balanced;
+      const priorityElement = document.getElementById('prioritySelectionText');
+      if (priorityElement) priorityElement.innerText = `User priority: ${priorityLabel}`;
       const reduction = rec.carbon_reduction_pct_vs_road;
       document.getElementById('carbonCutText').innerText = `${reduction >= 0 ? '-' : '+'}${Math.abs(reduction)}% CO2e`;
-      document.getElementById('recommendationTitle').innerText = `Optimal Mode: ${rec.recommended_mode.toUpperCase()}`;
+      document.getElementById('recommendationTitle').innerText = `Best mode for ${priorityLabel}: ${rec.recommended_mode.toUpperCase()}`;
       document.getElementById('recommendationSub').innerText =
         `Switching achieves a ${Math.abs(reduction)}% emissions ${reduction >= 0 ? 'reduction' : 'increase'} with INR ${Math.abs(rec.cost_savings_inr_vs_road).toLocaleString()} ${rec.cost_savings_inr_vs_road >= 0 ? 'savings' : 'premium'} relative to highway trucking.`;
 
@@ -102,7 +134,7 @@
       else if (priority === 'cost') { costW = 0.70; timeW = 0.15; emissW = 0.15; }
 
       // Draw immediately so the dashboard remains useful while the API is loading.
-      renderResults(origin, dest, fallbackResults);
+      renderResults(origin, dest, fallbackResults, null, priority);
 
       try {
         const response = await fetch('http://127.0.0.1:8000/api/optimize', {
@@ -127,11 +159,11 @@
         const rail = modes.find(m => m.mode === 'rail');
         const air = modes.find(m => m.mode === 'air');
 
-        renderResults(origin, dest, { road, rail, air }, data.recommendation);
+        renderResults(origin, dest, { road, rail, air }, data.recommendation, priority);
 
       } catch (err) {
         console.error("Pipeline request failed:", err);
-        renderResults(origin, dest, fallbackResults);
+        renderResults(origin, dest, fallbackResults, null, priority);
       }
     }
 
